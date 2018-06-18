@@ -1,6 +1,5 @@
 package com.spider.dbimport;
 
-import com.spider.dbimport.SQLRunner;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
