@@ -2,21 +2,27 @@ package com.spider.dbimport.clean;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import com.spider.dbimport.DataSet;
 
 public class DataSetCleaner {
 	
 	DataSet cleanConfig;
+	static Logger logger = LogManager.getLogger("DataSetCleaner");
 	
 	public DataSetCleaner(DataSet cleanConfig) {
 		this.cleanConfig = cleanConfig;
-		
+
+		logger.info("Loading rules:\n");
 		for(Map<String,Object> cleanConfigItem: cleanConfig.data) {
 			if(cleanConfigItem.get("value").equals("null")) {
 				//if the value specified in the "value" column of the cleaning rules is "null", 
 				//interpret it as the value null, not the string "null"
 				cleanConfigItem.put("value", null);
 			}
+			logger.info(cleanConfigItem);
 		}
 	}
 	
