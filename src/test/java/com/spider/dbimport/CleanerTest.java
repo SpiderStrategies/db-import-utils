@@ -18,7 +18,7 @@ public class CleanerTest {
 		DataSet cleaningData = new CSVFileReader(is).read();
 		DataSetCleaner cleaner = new DataSetCleaner(cleaningData);
 		cleaner.clean(ds);
-		assertNull(ds.data.get(3).get("ESP LTD EC-203"));
+		assertEquals("LTD EC-401", ds.data.get(3).get("model"));
 	}
 
 }
