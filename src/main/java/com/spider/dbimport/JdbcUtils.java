@@ -49,11 +49,30 @@ public class JdbcUtils {
 	}
 	
 	public static void batchInsert(String jdbcUrl, String sql, TreeSet<String> columnNames, List<Object[]> args) throws Exception {
+		JdbcTemplate jt = createJdbcTemplate(jdbcUrl);
 		try {
-			createJdbcTemplate(jdbcUrl).batchUpdate(sql, args);
+			jt.batchUpdate(sql, args);
 		}
 		catch(Exception e) {
 			logger.error("Error executing update", e);
+
+			if(e.getMessage().contains("String or binary data would be truncated")) {
+				//when doing a batch update and you receive an error regarding data being truncated, you have no idea
+				//which row of your batch actually blew things up.  The following forces your import to go through
+				//1 at a time and print out the actual failing record when that single insert blows up
+				for(Object[] rowArgs: args) {
+					try {
+						jt.update(sql, rowArgs);
+					}
+					catch(Exception e2) {
+						for(Object rowArg: rowArgs) {
+							logger.info(rowArg);
+						}
+
+					}
+				}
+			}
+
 			System.exit(0);
 		}
 	}
