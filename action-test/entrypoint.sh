@@ -1,11 +1,15 @@
 #!/bin/sh -l
 
-cd /github/
-curl https://github.com/SpiderStrategies/encryption-utils/archive/master.zip -o /github/master.zip
+#handle encryption-utils dependency
+cd ../
+wget https://github.com/SpiderStrategies/encryption-utils/archive/master.zip
 unzip master.zip
-mv master encryption-utils
-cd /github/encryption-utils
-gradle fatJar
+mv encryption-utils-master encryption-utils
+cd encryption-utils
+gradle dependencies
+gradle jar
 
-cd /github/workspace
+#switch back to db-import-utils
+cd ../workspace
+gradle dependencies
 gradle test
