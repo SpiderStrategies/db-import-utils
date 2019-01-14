@@ -8,5 +8,7 @@ LABEL "com.github.actions.color"="blue"
 LABEL "repository"="http://github.com/SpiderStrategies/db-import-utils"
 LABEL "maintainer"="Jason McKim <jason.mckim@spiderstrategies.com>"
 
+USER root
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
