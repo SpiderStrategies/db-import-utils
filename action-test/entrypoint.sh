@@ -1,5 +1,7 @@
 #!/bin/sh -l
 id
+su root
+id
 echo $PATH
 pwd
 ls /home
