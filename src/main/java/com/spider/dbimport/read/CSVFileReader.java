@@ -72,7 +72,7 @@ public class CSVFileReader extends AbstractReader {
 			if(columnType.contains("char") || columnType.contains("text")) {
 				return strVal;
 			}
-			else if(columnType.contains("date")) {
+			else if(columnType.contains("date") && !"".equals(strVal)) {
 				return new SimpleDateFormat(dateFormat).parse(strVal);
 			}
 			else if(columnType.contains("bit")) {
@@ -82,7 +82,7 @@ public class CSVFileReader extends AbstractReader {
 				//it's a numeric column type in the db, but we don't care about dollar symbols or commas from the CSV
 				strVal = strVal.replaceAll("\\$", "");//remove dollar symbols
 				strVal = strVal.replaceAll(",", "");//remove commas
-				return "".equals(strVal) ? null : Double.parseDouble(strVal);
+				return "".equals(strVal) || "undefined".equals(strVal) ? null : Double.parseDouble(strVal);
 			}
 		}
 		catch(Exception e) {
