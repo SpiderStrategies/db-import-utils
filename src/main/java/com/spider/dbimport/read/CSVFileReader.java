@@ -3,6 +3,7 @@ package com.spider.dbimport.read;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class CSVFileReader extends AbstractReader {
 	
 	static Logger logger = LogManager.getLogger("CSVFileReader");
 	
-	String dateFormat = System.getProperty("dateFormat");
+	String[] dateFormats = System.getProperty("dateFormat").split(",");
 
 	public CSVFileReader(InputStream is) {
 		super(is);
@@ -73,7 +74,17 @@ public class CSVFileReader extends AbstractReader {
 				return strVal;
 			}
 			else if(columnType.contains("date") && !"".equals(strVal)) {
-				return new SimpleDateFormat(dateFormat).parse(strVal);
+				for(String dateFormat: dateFormats) {
+					try {
+						return new SimpleDateFormat(dateFormat).parse(strVal);
+					}
+					catch(ParseException e) {
+						logger.debug("Could not parse date value" + strVal + " with format " + dateFormat);
+					}
+
+				}
+				throw new ParseException("Could not parse provided date string " + strVal, 0);
+
 			}
 			else if(columnType.contains("bit")) {
 				return Boolean.getBoolean(strVal);
