@@ -35,14 +35,16 @@ public class CSVExtractor {
 			String comma = "";
 			for(String header: headers) {
 				sb.append(comma);
-				if(header.toLowerCase().contains("date")) {
-					sb.append(df.format((row.get(header))));
-				}
-				else {
-					String colVal = (String) row.get(header);
-					if(colVal != null) {
-						colVal = colVal.replaceAll("\"", "");
-						sb.append("\"" + colVal + "\"");
+				Object colVal = (Object) row.get(header);
+				if(colVal != null) {
+					if(header.toLowerCase().contains("date")) {
+						sb.append(df.format(colVal));
+					}
+					else if(colVal instanceof String) {
+						sb.append("\"" + ((String) colVal).replaceAll("\"", "") + "\"");
+					}
+					else {
+						sb.append(colVal);
 					}
 				}
 				comma = ",";
